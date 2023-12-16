@@ -6,6 +6,7 @@ public class GestionHoteliere {
         System.out.println("Bienvenue à notre hôtel !");
 
         System.out.println("Que souhaitez-vous faire aujourd'hui ?");
+		System.out.println("H pour l'aide");
 
         Chambre[] chambreList = Chambre.values();
 
