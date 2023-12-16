@@ -18,6 +18,7 @@ public class GestionHoteliere {
 			
 				// Message d'aide
 				case "h" :
+					System.out.println("testtt");
 					System.out.println("h: Affiche les instructions disponibles");
                     System.out.println("r: Permet de voir les réservations de chambre");
 					System.out.println("q: Quitte le programme");
