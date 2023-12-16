@@ -18,7 +18,6 @@ public class GestionHoteliere {
 			
 				// Message d'aide
 				case "h" :
-					System.out.println("testtt");
 					System.out.println("h: Affiche les instructions disponibles");
                     System.out.println("r: Permet de voir les réservations de chambre");
 					System.out.println("q: Quitte le programme");
@@ -32,10 +31,12 @@ public class GestionHoteliere {
 					System.out.println("Tapez le nombre indiqué pour faire votre choix\n");
 
                     int indiceChambre = 0;
-for(Chambre chambre : chambreList){
-    					System.out.println(indiceChambre  + " : Chambre " + chambre.getTypeChambre() + " avec un lit " + chambre.getTypeLit());
-indiceChambre++;
-}
+
+					// Pour chaque valeur possible
+					for(Chambre chambre : chambreList){
+						System.out.println(indiceChambre  + " : Chambre " + chambre.getTypeChambre() + " avec un lit " + chambre.getTypeLit());
+						indiceChambre++;
+					}
 
 					choice = scan.next();
 
