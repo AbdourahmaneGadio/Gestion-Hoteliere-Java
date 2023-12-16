@@ -2,8 +2,8 @@ public enum Chambre {
 
     NORMAL_SIMPLE("normal", "simple"), 
     NORMAL_DOUBLE("normal", "double"),
-    LUXE_SIMPLE("luxe", "simple"),
-    LUXE_DOUBLE("luxe", "double");
+    LUXE_SIMPLE("de luxe", "simple"),
+    LUXE_DOUBLE("de luxe", "double");
 
    private String typeChambre;
     private String typeLit;
