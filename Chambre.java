@@ -1,24 +1,23 @@
-public enum Chambre {
+public class Chambre {
 
-    NORMAL_SIMPLE("normal", "simple"), 
-    NORMAL_DOUBLE("normal", "double"),
-    LUXE_SIMPLE("de luxe", "simple"),
-    LUXE_DOUBLE("de luxe", "double");
+   private TypeChambre typeChambre;
+  private TypeLit typeLit;
 
-   private String typeChambre;
-    private String typeLit;
-
-   private Chambre(String typeChambre, String typeLit){
+   public Chambre(TypeChambre typeChambre, TypeLit typeLit){
     this.typeChambre = typeChambre;
-        this.typeLit = typeLit;
+    this.typeLit = typeLit;
    } // Chambre()
 
-public String getTypeChambre(){
-    return typeChambre;
-} // getTypeChambre()
+    public String getTypeChambre(){
+        return typeChambre.toString();
+    } // getTypeChambre()
 
-   public String getTypeLit(){
-    return typeLit;
-   } // getTypeLit()
+    public String getTypeLit(){
+        return typeLit.toString();
+    } // getTypeLit()
+
+    public String toString(){
+        return "Chambre " + getTypeChambre() + " avec un lit " + getTypeLit();
+    }
     
 } // Chambre

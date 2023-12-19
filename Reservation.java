@@ -1,25 +1,42 @@
+import java.io.File; // Permet de créer un fichier
+import java.io.FileWriter; // Permet de lire/écrire dans un fichier
+import java.io.IOException; // Exception si le fichier n'existe pas
+
 public class Reservation {
 
-    private Chambre chambre;
-
-    public Reservation(Chambre chambre){
-        this.chambre = chambre;
+    public Reservation() {
     }
 
-    public void ajoutReserv(){
+    public void ajoutReserv(Chambre chambre) throws NoRoomAvailableException {
+            try {
+
+                // On crée le fichier dans lequel on sauvegarde toutes les données
+                File myObj = new File("donneesClient.txt");
+                myObj.createNewFile();
+
+                // On ouvre le fichier en écriture
+                FileWriter myWriter = new FileWriter("donneesClient.txt", true); // True pour garder les informations
+                                                                            // précédentes
+                myWriter.write("Client 1 : " + chambre + "\n");
+                myWriter.close();
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+        
 
     } // ajoutReserv()
 
-        public void modifReserv(){
+    public void modifReserv() {
 
     } // modifReserv()
 
-        public void supprimerReserv(){
+    public void supprimerReserv() {
 
     } // supprimerReserv()
 
-        public void annulationReserv(){
+    public void annulationReserv() {
 
     } // annulationReserv()
-    
+
 }
