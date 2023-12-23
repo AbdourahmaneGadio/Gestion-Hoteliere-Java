@@ -4,10 +4,12 @@ import java.io.IOException; // Exception si le fichier n'existe pas
 
 public class Reservation {
 
+    
+
     public Reservation() {
     }
 
-    public void ajoutReserv(Chambre chambre) throws NoRoomAvailableException {
+    public void ajoutReserv(Chambre chambre, String nomClient) throws NoRoomAvailableException {
             try {
 
                 // On crée le fichier dans lequel on sauvegarde toutes les données
@@ -17,8 +19,10 @@ public class Reservation {
                 // On ouvre le fichier en écriture
                 FileWriter myWriter = new FileWriter("donneesClient.txt", true); // True pour garder les informations
                                                                             // précédentes
-                myWriter.write("Client 1 : " + chambre + "\n");
+                myWriter.write(nomClient + " : " + chambre + "\n");
                 myWriter.close();
+
+                System.out.println("\nRéservation effectuée avec succès !\n");
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
