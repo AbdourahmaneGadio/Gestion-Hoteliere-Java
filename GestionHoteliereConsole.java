@@ -2,124 +2,88 @@ import java.util.Scanner;
 
 public class GestionHoteliereConsole {
 
-	public GestionHoteliereConsole() {
+    public GestionHoteliereConsole() {
 
-		GestionHoteliere gestionHoteliere = new GestionHoteliere();
+        System.out.println("\nBienvenue dans nôtre hôtel !");
 
-		Scanner scan = new Scanner(System.in);
+        GestionHoteliere gestionHoteliere = new GestionHoteliere(1);
 
-		System.out.println("Bienvenue à notre hôtel !");
+        System.out.println("\nQue souhaitez-vous faire ? Tapez une des commandes ci-dessous.\n");
 
-		System.out.println("Quel est votre nom ?");
+        // Liste des options disponibles
+        String optionsDisponibles = "c: Permet de réserver une chambre\n";
+        optionsDisponibles+= "h: Affiche ce terminal d'aide\n";
+        optionsDisponibles+="q: Quitte le programme\n";
+        optionsDisponibles+= "r: Permet de commander un repas";
 
-		String nomClient = scan.next();
+        System.out.println(optionsDisponibles);
 
-		System.out.println("Que souhaitez-vous faire aujourd'hui ?");
+        Scanner scan = new Scanner(System.in);
+        String choix = scan.next();
 
-		String choice = scan.next();
+        while (true) {
 
-		while (true) {
-			// Condition multiple
-			switch (choice) { // Valide depuis Java 1.7
+            switch (choix) {
 
-				// Message d'aide
-				case "h":
-					System.out.println("h: Affiche les instructions disponibles");
-					System.out.println("p: Commander un repas");
-					System.out.println("r: Réserver une chambre");
-					System.out.println("q: Quitte le programme");
-					System.out.println("\nQue souhaitez-vous faire aujourd'hui ?");
-					choice = scan.next();
-					break;
+                // Réservation de chambre
+                case "c":
+                    System.out.println("RESERVATION DE CHAMBRE");
+                    System.out.println("\nVoici les détails des chambres disponibles: \n");
+                    gestionHoteliere.detailsChambres();
 
-				// Réservation de chambre
-				case "r":
+                    System.out.println("\nQuelle chambre voulez-vous réserver ?");
+                    System.out.println("\nTapez le numéro de la chambre.");
 
-					gestionHoteliere.chambreDispoDetails();
+                    choix = scan.next();
 
-					// On choisit un type de chambre
-					TypeChambre typeChambreChoisie = choixChambre(scan);
-					// On choisit un type de lit
-					TypeLit typeLitChoisi = choixLit(scan);
+                    // On réserve la chambre
+                    System.out.println("\nRéservation de la chambre " + choix + " en cours...");
 
-					// On regarde si une chambre est disponible
-					Chambre chambreRecherche = new Chambre(typeChambreChoisie, typeLitChoisi);
-					try {
-						Chambre chambreDispo = gestionHoteliere.getChambreDispo(chambreRecherche);
-						
-						Reservation reservation = new Reservation();
-						reservation.ajoutReserv(chambreDispo, nomClient);
-					} catch (NoRoomAvailableException e) {
-						e.getMessage();
-					}
+                    // ...
+                    break;
 
-					System.out.println("\nQue souhaitez-vous faire aujourd'hui ?");
-					choice = scan.next();
+                // Terminal d'aide
+                case "h":
+                    System.out.println("-------------------------------------");
+                    System.out.println(optionsDisponibles);
+                    System.out.println("-------------------------------------");
 
-					break;
+                    break;
 
-				// On quitte
-				case "q": // Ici on utilise "q" avec des guillemets en tant que String.
-					System.out.println("\nMerci d'avoir fait confiance à nos services !");
-					scan.close();
-					System.exit(0);
-					break;
+                // On quitte le programme
+                case "q":
+                    System.out.println("\nAu revoir !\n");
+                    scan.close();
 
-				// Autre
-				default:
-					System.out.println("\nCommande inconnue, tapez h pour afficher l'aide");
-					choice = scan.next();
-					break;
-			} // switch
+                    // On enregistre dans un fichier texte l'ensemble des détails du client
+                    // Données : prix chambre, nombre de repas consommé
 
-		} // while
+                    System.exit(0);
+                    break;
 
-	} // GestionHoteliereConsole()
+                         // Terminal d'aide
+                case "r":
+                    System.out.println("COMMANDE DE REPAS");
+             
+                    break;
 
-	private static TypeChambre choixChambre(Scanner scan) {
+                // Commande incorrecte
+                default:
+                    System.out.println("\nCommande incorrecte. Tapez h pour voir l'aide.\n");
 
-		System.out.println("Quelle type de chambre voulez-vous réserver ?");
-		System.out.println("Tapez le nombre indiqué pour faire votre choix\n");
+                    break;
 
-		int indiceChambre = 0;
+            } // switch
 
-		TypeChambre[] typeChambreList = TypeChambre.values();
+            System.out.println("\nQue souhaitez-vous faire ?");
+            choix = scan.next();
 
-		// Pour chaque valeur possible
-		for (TypeChambre typeChambre : typeChambreList) {
-			System.out.println(indiceChambre + " : " + typeChambre);
-			indiceChambre++;
-		}
+        } // while
 
-		String choice = scan.next();
+    } // GestionHoteliereConsole()
 
-		int choixToInt = Integer.parseInt(choice);
-		return typeChambreList[choixToInt];
-	}
+    public static void main(String[] args) {
+        new GestionHoteliereConsole();
+    }
 
-	private static TypeLit choixLit(Scanner scan) {
-
-		System.out.println("Quelle type de lit voulez-vous pour cette chambre ?");
-		System.out.println("Tapez le nombre indiqué pour faire votre choix\n");
-
-		int indiceLit = 0;
-
-		TypeLit[] typeLitList = TypeLit.values();
-
-		// Pour chaque valeur possible
-		for (TypeLit typeLit : typeLitList) {
-			System.out.println(indiceLit + " : " + typeLit);
-			indiceLit++;
-		}
-
-		String choice = scan.next();
-
-		int choixToInt = Integer.parseInt(choice);
-		return typeLitList[choixToInt];
-	} // choixLit()
-
-	public static void main(String[] args) {
-		new GestionHoteliereConsole();
-	} // main
-
-} // GestionHoteliere
+} // GestionHoteliereConsole

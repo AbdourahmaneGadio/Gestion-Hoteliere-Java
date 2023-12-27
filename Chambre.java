@@ -1,23 +1,15 @@
 public class Chambre {
 
-   private TypeChambre typeChambre;
-  private TypeLit typeLit;
+    private TypeLit typeLit;
+    private TypeChambre typeChambre;
 
-   public Chambre(TypeChambre typeChambre, TypeLit typeLit){
-    this.typeChambre = typeChambre;
-    this.typeLit = typeLit;
-   } // Chambre()
-
-    public String getTypeChambre(){
-        return typeChambre.toString();
-    } // getTypeChambre()
-
-    public String getTypeLit(){
-        return typeLit.toString();
-    } // getTypeLit()
+    public Chambre(TypeLit typeLit, TypeChambre typeChambre){
+        this.typeLit = typeLit;
+        this.typeChambre = typeChambre;
+    };
 
     public String toString(){
-        return "Chambre " + getTypeChambre() + " avec un lit " + getTypeLit();
+        return typeChambre + " avec Lit " + typeLit;
     }
     
-} // Chambre
+}

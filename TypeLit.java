@@ -1,16 +1,21 @@
 public enum TypeLit {
 
-    SIMPLE("simple"), 
-    DOUBLE("double");
+    SIMPLE("simple", 5), DOUBLE("double", 10);
 
     private String typeLit;
+    private int prixLit;
 
-    private TypeLit(String typeLit){
+    private TypeLit(String typeLit, int prixLit) {
         this.typeLit = typeLit;
+        this.prixLit = prixLit;
     }
 
-    public String getTypeLit(){
+    public String getTypeLit() {
         return typeLit;
+    }
+
+    public int getPrixLit(){
+        return prixLit;
     }
 
 }
