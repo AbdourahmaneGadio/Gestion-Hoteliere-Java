@@ -9,7 +9,11 @@ public class Chambre {
     };
 
     public String toString(){
-        return typeChambre + " avec Lit " + typeLit;
+        return typeChambre + " avec Lit " + typeLit + " - Prix : " + getPrixChambre();
+    }
+
+    public int getPrixChambre(){
+        return typeChambre.getPrixChambre() + typeLit.getPrixLit();
     }
     
 }

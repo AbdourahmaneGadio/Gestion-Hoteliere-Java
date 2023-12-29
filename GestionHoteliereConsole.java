@@ -6,15 +6,15 @@ public class GestionHoteliereConsole {
 
         System.out.println("\nBienvenue dans nôtre hôtel !");
 
-        GestionHoteliere gestionHoteliere = new GestionHoteliere(1);
+        GestionHoteliere gestionHoteliere = new GestionHoteliere(0);
 
         System.out.println("\nQue souhaitez-vous faire ? Tapez une des commandes ci-dessous.\n");
 
         // Liste des options disponibles
         String optionsDisponibles = "c: Permet de réserver une chambre\n";
-        optionsDisponibles+= "h: Affiche ce terminal d'aide\n";
-        optionsDisponibles+="q: Quitte le programme\n";
-        optionsDisponibles+= "r: Permet de commander un repas";
+        optionsDisponibles += "h: Affiche ce terminal d'aide\n";
+        optionsDisponibles += "q: Quitte le programme\n";
+        optionsDisponibles += "r: Permet de commander un repas";
 
         System.out.println(optionsDisponibles);
 
@@ -27,19 +27,16 @@ public class GestionHoteliereConsole {
 
                 // Réservation de chambre
                 case "c":
-                    System.out.println("RESERVATION DE CHAMBRE");
-                    System.out.println("\nVoici les détails des chambres disponibles: \n");
-                    gestionHoteliere.detailsChambres();
 
-                    System.out.println("\nQuelle chambre voulez-vous réserver ?");
-                    System.out.println("\nTapez le numéro de la chambre.");
 
-                    choix = scan.next();
-
-                    // On réserve la chambre
-                    System.out.println("\nRéservation de la chambre " + choix + " en cours...");
-
-                    // ...
+                    // On effectue des opérations sur les réservations
+                    try {
+                        gestionHoteliere.gestionReserv(scan);
+                    } catch (NoRoomAvailableException e) {
+                        e.getMessage();
+                    }
+                   
+                 
                     break;
 
                 // Terminal d'aide
@@ -61,10 +58,12 @@ public class GestionHoteliereConsole {
                     System.exit(0);
                     break;
 
-                         // Terminal d'aide
+                // Terminal d'aide
                 case "r":
-                    System.out.println("COMMANDE DE REPAS");
-             
+
+                       // On effectue des opérations sur les repas
+                    gestionHoteliere.gestionRepas(scan);
+
                     break;
 
                 // Commande incorrecte
