@@ -6,7 +6,7 @@ public class GestionHoteliereConsole {
 
         System.out.println("\nBienvenue dans nôtre hôtel !");
 
-        GestionHoteliere gestionHoteliere = new GestionHoteliere(0);
+        GestionHoteliere gestionHoteliere = new GestionHoteliere(1);
 
         System.out.println("\nQue souhaitez-vous faire ? Tapez une des commandes ci-dessous.\n");
 
@@ -28,15 +28,13 @@ public class GestionHoteliereConsole {
                 // Réservation de chambre
                 case "c":
 
-
                     // On effectue des opérations sur les réservations
                     try {
                         gestionHoteliere.gestionReserv(scan);
                     } catch (NoRoomAvailableException e) {
-                        e.getMessage();
+                        System.out.println(e.getMessage());
                     }
-                   
-                 
+
                     break;
 
                 // Terminal d'aide
@@ -50,18 +48,21 @@ public class GestionHoteliereConsole {
                 // On quitte le programme
                 case "q":
                     System.out.println("\nAu revoir !\n");
-                    scan.close();
 
                     // On enregistre dans un fichier texte l'ensemble des détails du client
                     // Données : prix chambre, nombre de repas consommé
+                    gestionHoteliere.enregistrerFacture();
 
+                    scan.close();
+
+                    // On quitte le programme
                     System.exit(0);
                     break;
 
                 // Terminal d'aide
                 case "r":
 
-                       // On effectue des opérations sur les repas
+                    // On effectue des opérations sur les repas
                     gestionHoteliere.gestionRepas(scan);
 
                     break;
@@ -83,6 +84,6 @@ public class GestionHoteliereConsole {
 
     public static void main(String[] args) {
         new GestionHoteliereConsole();
-    }
+    } // main()
 
 } // GestionHoteliereConsole

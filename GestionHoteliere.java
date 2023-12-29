@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -5,6 +10,8 @@ public class GestionHoteliere {
 
     private LinkedList<Chambre> listeChambre = new LinkedList<Chambre>();
     private int facture = 0;
+    private String filenameFacture = "donneesClient.txt";
+    private String filenameChambre = "donneesChambre.txt";
 
     public GestionHoteliere(int nombreChambres) {
 
@@ -22,6 +29,9 @@ public class GestionHoteliere {
 
             } // for TypeChambre
         }
+
+        // On récupère la facture enregistrée
+        recupererFacture();
 
     } // GestionHoteliere()
 
@@ -63,11 +73,19 @@ public class GestionHoteliere {
                 System.out.println("\nTapez le numéro de la chambre.");
 
                 choixReserv = scan.next();
+                int choixReservToInt = Integer.parseInt(choixReserv);
+
+                while (choixReservToInt > listeChambre.size() || choixReservToInt <= 0) {
+                    System.out.println("Choix incorrect. Veuillez saisir une bonne valeur.");
+
+                    choixReserv = scan.next();
+                    choixReservToInt = Integer.parseInt(choixReserv);
+                }
+
+                choixReservToInt -= 1; // On enlève 1, car le 1er indice du tableau commence à 0
 
                 // On réserve la chambre
                 System.out.println("\nRéservation de la chambre " + choixReserv + " en cours...");
-
-                int choixReservToInt = Integer.parseInt(choixReserv) - 1;
 
                 Chambre chambreChoisie = removeChambreFromList(choixReservToInt);
 
@@ -157,8 +175,20 @@ public class GestionHoteliere {
 
         String choixRepas = scan.next();
 
+        int choixRepasToInt = Integer.parseInt(choixRepas);
+
+        while (choixRepasToInt < 0 || choixRepasToInt > 3) {
+            System.out.println("\nChoix incorrect.");
+
+            System.out.println("\nQuel type de repas voulez-vous commander ?");
+
+            choixRepas = scan.next();
+
+            choixRepasToInt = Integer.parseInt(choixRepas);
+        }
+
         // -1, car le choix imposé commence à 1
-        Repas repasChoisi = Repas.values()[Integer.parseInt(choixRepas) - 1];
+        Repas repasChoisi = Repas.values()[choixRepasToInt - 1];
 
         System.out.println("Vous avez choisi de prendre: '" + repasChoisi + "'");
 
@@ -167,5 +197,69 @@ public class GestionHoteliere {
         System.out.println("\nVotre facture actuelle : " + facture);
 
     } // gestionRepas()
+
+    public void recupererFacture() {
+        // Deserialization
+        try {
+            // On lit les données du fichier
+            FileInputStream file = new FileInputStream(filenameFacture);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            FileInputStream fileChambre = new FileInputStream(filenameChambre);
+            ObjectInputStream inChambre = new ObjectInputStream(fileChambre);
+
+            // On attribute la valeur de la facture
+            try {
+                facture = (int) in.readObject();
+
+                // while (true) {
+                //     listeChambre.add((Chambre) inChambre.readObject());
+                // }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            // On ferme le fichier
+            in.close();
+            file.close();
+
+            inChambre.close();
+            fileChambre.close();
+
+        }
+
+        catch (IOException ex) {
+            System.out.println("Problème lecture facture");
+        }
+    } // recupererFacture()
+
+    public void enregistrerFacture() {
+        // Serialization
+        try {
+            // On ouvre un fichier
+            FileOutputStream file = new FileOutputStream(filenameFacture);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            // On écrit dans le fichier
+            out.writeObject(facture);
+
+            out.close();
+            file.close();
+
+            FileOutputStream fileChambre = new FileOutputStream(filenameChambre);
+            ObjectOutputStream outChambre = new ObjectOutputStream(fileChambre);
+
+               // outChambre.writeObject(listeChambre);
+            
+
+            outChambre.close();
+            fileChambre.close();
+
+        }
+
+        catch (IOException ex) {
+            System.out.println("Problème enregistrement facture");
+        }
+    } // enregistrerFacture()
 
 } // GestionHoteliere
