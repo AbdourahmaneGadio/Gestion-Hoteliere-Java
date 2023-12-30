@@ -10,6 +10,7 @@ public class GestionHoteliere {
 
     private LinkedList<Chambre> listeChambre = new LinkedList<Chambre>();
     private LinkedList<Chambre> listeChambrePrises = new LinkedList<Chambre>();
+    private LinkedList<Repas> listeRepasPris = new LinkedList<Repas>();
 
     private int facture = 0;
     private String filenameFacture = "donneesClient.txt";
@@ -134,7 +135,7 @@ public class GestionHoteliere {
 
                 choixChambreRemplaceToInt -= 1; // On enlève 1, car le 1er indice du tableau commence à 0
 
-                modifReservation(choixReservToInt,choixChambreRemplaceToInt);
+                modifReservation(choixReservToInt, choixChambreRemplaceToInt);
 
                 break;
             case "3":
@@ -145,10 +146,6 @@ public class GestionHoteliere {
                 System.out.println("\nTapez le numéro de la réservation.");
 
                 choixReserv = scan.next();
-
-                // On supprime la réservation
-                System.out.println("\nSuppression de la réservation " + choixReserv + " en cours...");
-
                 choixReservToInt = Integer.parseInt(choixReserv);
 
                 while (choixReservToInt > listeChambrePrises.size() || choixReservToInt <= 0) {
@@ -159,6 +156,12 @@ public class GestionHoteliere {
                 }
 
                 choixReservToInt -= 1; // On enlève 1, car le 1er indice du tableau commence à 0
+
+                // On supprime la réservation
+                System.out.println("\nSuppression de la réservation " + choixReserv + " en cours...");
+
+                annulerReservation(choixReservToInt);
+
                 break;
 
             case "4":
@@ -269,7 +272,7 @@ public class GestionHoteliere {
         LinkedList<Chambre> listeChambreReservTmp = new LinkedList<Chambre>();
 
         int indiceBoucleReserv = 0;
- int indiceBoucleDispo = 0;
+        int indiceBoucleDispo = 0;
 
         // La liste des réservations
         for (Chambre chambre : listeChambrePrises) {
@@ -280,8 +283,8 @@ public class GestionHoteliere {
             }
 
             // On a trouvé la bonne réservation
-            else{
-                         // On retire de la facture l'ancienne chambre chosie
+            else {
+                // On retire de la facture l'ancienne chambre chosie
                 facture -= chambre.getPrixChambre();
             }
             indiceBoucleReserv++;
@@ -295,17 +298,16 @@ public class GestionHoteliere {
 
             // Si on n'est pas sur la chambre à remplacer
             if (indiceBoucleDispo == indiceChambre) {
-                                listeChambreTmp.add(chambre2);
+                listeChambreTmp.add(chambre2);
 
-            
-            } 
-            
+            }
+
             // Si on a trouvé la chambre à remplacer
             else {
-                    listeChambreReservTmp.add(chambre2);
+                listeChambreReservTmp.add(chambre2);
 
                 // On ajoute à la facture le prix de la nouvelle chambre
-                facture+=chambre2.getPrixChambre();
+                facture += chambre2.getPrixChambre();
             }
             indiceBoucleDispo++;
         }
@@ -351,6 +353,7 @@ public class GestionHoteliere {
 
         System.out.println("Vous avez choisi de prendre: '" + repasChoisi + "'");
 
+        listeRepasPris.add(repasChoisi);
         facture += repasChoisi.getPrixRepas();
 
         System.out.println("\nVotre facture actuelle : " + facture);
@@ -419,5 +422,65 @@ public class GestionHoteliere {
             System.out.println("Problème enregistrement facture");
         }
     } // enregistrerFacture()
+
+    public void showFacture() {
+        int indiceChambre = 1;
+        int indiceRepas = 1;
+
+        // Si on a commandé quelque chose
+        if (!listeChambre.isEmpty() && !listeRepasPris.isEmpty()) {
+
+            System.out.println("Votre facture comprend :\n ");
+
+            // Affichage des chambres prises
+            System.out.println("------------------------------");
+            System.out.println("FACTURE");
+            System.out.println("------------------------------");
+
+            // Partie pour les chambres
+            if (!listeChambrePrises.isEmpty()) {
+                System.out.println("\n");
+
+                System.out.println("---------");
+                System.out.println("CHAMBRE");
+                System.out.println("---------");
+
+                for (Chambre chambre : listeChambrePrises) {
+                    System.out.println("Chambre " + indiceChambre + " - " + chambre + "\n");
+                    indiceChambre++;
+                }
+                System.out.println("\n");
+
+            }
+
+            // Partie pour les repas
+            if (!listeRepasPris.isEmpty()) {
+                System.out.println("\n");
+                System.out.println("---------");
+                System.out.println("REPAS");
+                System.out.println("---------");
+
+                // Affichage des repas pris
+                for (Repas repas : listeRepasPris) {
+                    System.out.println("Repas " + indiceRepas + " - " + repas);
+                    indiceRepas++;
+                }
+                System.out.println("\n");
+
+            }
+
+             System.out.println("-------------------");
+            System.out.println("Total : " + facture + "€");
+             System.out.println("-------------------");
+
+                             System.out.println("\n");
+
+            System.out.println("------------------------------");
+            System.out.println("Fin FACTURE");
+            System.out.println("------------------------------");
+
+        } // Si on a commandé quelque chose
+
+    } // showFacture()
 
 } // GestionHoteliere

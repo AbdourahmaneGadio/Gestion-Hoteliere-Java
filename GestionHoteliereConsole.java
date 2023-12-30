@@ -47,11 +47,13 @@ public class GestionHoteliereConsole {
 
                 // On quitte le programme
                 case "q":
-                    System.out.println("\nAu revoir !\n");
 
                     // On enregistre dans un fichier texte l'ensemble des détails du client
                     // Données : prix chambre, nombre de repas consommé
                     gestionHoteliere.enregistrerFacture();
+                    gestionHoteliere.showFacture();
+
+                    System.out.println("\nAu revoir !\n");
 
                     scan.close();
 
