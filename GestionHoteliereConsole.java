@@ -11,7 +11,7 @@ public class GestionHoteliereConsole {
         System.out.println("\nQue souhaitez-vous faire ? Tapez une des commandes ci-dessous.\n");
 
         // Liste des options disponibles
-        String optionsDisponibles = "c: Permet de réserver une chambre\n";
+        String optionsDisponibles = "c: Permet d'effectuer des opérations sur les réservations de chambre\n";
         optionsDisponibles += "h: Affiche ce terminal d'aide\n";
         optionsDisponibles += "q: Quitte le programme\n";
         optionsDisponibles += "r: Permet de commander un repas";
