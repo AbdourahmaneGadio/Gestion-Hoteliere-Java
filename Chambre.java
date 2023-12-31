@@ -1,4 +1,6 @@
-public class Chambre {
+import java.io.Serializable;
+
+public class Chambre implements Serializable{
 
     private TypeLit typeLit;
     private TypeChambre typeChambre;

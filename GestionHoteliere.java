@@ -13,11 +13,11 @@ public class GestionHoteliere {
     private LinkedList<Repas> listeRepasPris = new LinkedList<Repas>();
 
     private int facture = 0;
-    private String filenameFacture = "donneesClient.txt";
-    private String filenameChambre = "donneesChambre.txt";
+    private String filename = "donneesHotel.txt";
 
     public GestionHoteliere(int nombreChambres) {
 
+        // On crée une liste de chambre par défaut
         // On ajoute x nombre de chambres de chaque type
         for (int indiceChambre = 0; indiceChambre < nombreChambres; indiceChambre++) {
 
@@ -241,32 +241,35 @@ public class GestionHoteliere {
     public void annulerReservation(int indiceChambre) {
 
         LinkedList<Chambre> listeChambreTmp = new LinkedList<Chambre>();
+        LinkedList<Chambre> listeChambreReservTmp = new LinkedList<Chambre>();
 
         Chambre chambreChoisie = new Chambre(null, null);
         int indice = 0;
         for (Chambre chambre : listeChambrePrises) {
-            if (indice == indiceChambre) {
-                chambreChoisie = chambre;
 
-                // On retire de la facture la chambre annulée
-                facture -= chambreChoisie.getPrixChambre();
+            // Si on ne veut pas annuler cette chambre
+            if (indice != indiceChambre) {
+                listeChambreReservTmp.add(chambre);
             } else {
+chambreChoisie = chambre;
+                // On retire de la facture la chambre annulée
+                facture -= chambre.getPrixChambre();
+
+                // On réajoute la chambre supprimé dans la liste des chambres disponibles
                 listeChambreTmp.add(chambre);
             }
 
             indice++;
         }
 
-        listeChambrePrises = listeChambreTmp;
+        listeChambre = listeChambreTmp;
+        listeChambrePrises = listeChambreReservTmp;
 
         listeChambre.add(chambreChoisie);
 
     } // annulerReservation()
 
     public void modifReservation(int indiceReservation, int indiceChambre) {
-
-        System.out.println("Indice réserv : " + indiceReservation);
-        System.out.println("Indice chambre : " + indiceChambre);
 
         LinkedList<Chambre> listeChambreTmp = new LinkedList<Chambre>();
         LinkedList<Chambre> listeChambreReservTmp = new LinkedList<Chambre>();
@@ -277,6 +280,8 @@ public class GestionHoteliere {
         // La liste des réservations
         for (Chambre chambre : listeChambrePrises) {
 
+            System.out.println("Chambre qui a été réservé : " + chambre);
+
             // Si on n'est pas sur la bonne réservation à changer
             if (indiceBoucleReserv != indiceReservation) {
                 listeChambreReservTmp.add(chambre);
@@ -284,22 +289,20 @@ public class GestionHoteliere {
 
             // On a trouvé la bonne réservation
             else {
+
                 // On retire de la facture l'ancienne chambre chosie
                 facture -= chambre.getPrixChambre();
+
             }
             indiceBoucleReserv++;
         }
 
-        listeChambrePrises = listeChambreReservTmp;
-
-        // On remplace la chambre LUXE DOUBLE, par LUXE SIMPLE
-
+        // La liste des chambres disponibles
         for (Chambre chambre2 : listeChambre) {
 
             // Si on n'est pas sur la chambre à remplacer
-            if (indiceBoucleDispo == indiceChambre) {
+            if (indiceBoucleDispo != indiceChambre) {
                 listeChambreTmp.add(chambre2);
-
             }
 
             // Si on a trouvé la chambre à remplacer
@@ -311,8 +314,6 @@ public class GestionHoteliere {
             }
             indiceBoucleDispo++;
         }
-
-        // Résultat attendu dans chambres dispo : 3 chambres
 
         listeChambrePrises = listeChambreReservTmp;
         listeChambre = listeChambreTmp;
@@ -364,19 +365,30 @@ public class GestionHoteliere {
         // Deserialization
         try {
             // On lit les données du fichier
-            FileInputStream file = new FileInputStream(filenameFacture);
+            FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
-
-            FileInputStream fileChambre = new FileInputStream(filenameChambre);
-            ObjectInputStream inChambre = new ObjectInputStream(fileChambre);
 
             // On attribute la valeur de la facture
             try {
-                facture = (int) in.readObject();
+                LinkedList<Chambre> listeChambreTmp = new LinkedList<Chambre>();
 
-                // while (true) {
-                // listeChambre.add((Chambre) inChambre.readObject());
-                // }
+                Chambre chambrePlusDispo = (Chambre) in.readObject();
+
+                for (Chambre chambre : listeChambre) {
+
+                    // Si la chambre dans la liste n'est pas réservée
+                    if (!chambre.toString().equals(chambrePlusDispo.toString())) {
+                        listeChambreTmp.add(chambre);
+                    }
+                    // Sinon
+                    else {
+                        listeChambrePrises.add(chambrePlusDispo);
+                    }
+
+                }
+
+                listeChambre = listeChambreTmp;
+
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -385,13 +397,10 @@ public class GestionHoteliere {
             in.close();
             file.close();
 
-            inChambre.close();
-            fileChambre.close();
-
         }
 
         catch (IOException ex) {
-            System.out.println("Problème lecture facture");
+            System.out.println("1ère exécution du programme");
         }
     } // recupererFacture()
 
@@ -399,27 +408,23 @@ public class GestionHoteliere {
         // Serialization
         try {
             // On ouvre un fichier
-            FileOutputStream file = new FileOutputStream(filenameFacture);
+            FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
-            // On écrit dans le fichier
-            out.writeObject(facture);
+            // On écrit dans le fichier les chambres qui ne seront plus disponibles à la
+            // prochaine exécution
+            for (Chambre chambre : listeChambrePrises) {
+                out.writeObject(chambre);
+            }
 
             out.close();
             file.close();
-
-            FileOutputStream fileChambre = new FileOutputStream(filenameChambre);
-            ObjectOutputStream outChambre = new ObjectOutputStream(fileChambre);
-
-            // outChambre.writeObject(listeChambre);
-
-            outChambre.close();
-            fileChambre.close();
 
         }
 
         catch (IOException ex) {
             System.out.println("Problème enregistrement facture");
+            ex.printStackTrace();
         }
     } // enregistrerFacture()
 
@@ -428,7 +433,7 @@ public class GestionHoteliere {
         int indiceRepas = 1;
 
         // Si on a commandé quelque chose
-        if (!listeChambre.isEmpty() && !listeRepasPris.isEmpty()) {
+        if (!listeChambre.isEmpty() || !listeRepasPris.isEmpty()) {
 
             System.out.println("Votre facture comprend :\n ");
 
@@ -449,7 +454,6 @@ public class GestionHoteliere {
                     System.out.println("Chambre " + indiceChambre + " - " + chambre + "\n");
                     indiceChambre++;
                 }
-                System.out.println("\n");
 
             }
 
@@ -465,15 +469,14 @@ public class GestionHoteliere {
                     System.out.println("Repas " + indiceRepas + " - " + repas);
                     indiceRepas++;
                 }
-                System.out.println("\n");
 
             }
 
-             System.out.println("-------------------");
+            System.out.println("-------------------");
             System.out.println("Total : " + facture + "€");
-             System.out.println("-------------------");
+            System.out.println("-------------------");
 
-                             System.out.println("\n");
+            System.out.println("\n");
 
             System.out.println("------------------------------");
             System.out.println("Fin FACTURE");
