@@ -1,24 +1,21 @@
-public enum Chambre {
+import java.io.Serializable;
 
-    NORMAL_SIMPLE("normal", "simple"), 
-    NORMAL_DOUBLE("normal", "double"),
-    LUXE_SIMPLE("de luxe", "simple"),
-    LUXE_DOUBLE("de luxe", "double");
+public class Chambre implements Serializable{
 
-   private String typeChambre;
-    private String typeLit;
+    private TypeLit typeLit;
+    private TypeChambre typeChambre;
 
-   private Chambre(String typeChambre, String typeLit){
-    this.typeChambre = typeChambre;
+    public Chambre(TypeLit typeLit, TypeChambre typeChambre){
         this.typeLit = typeLit;
-   } // Chambre()
+        this.typeChambre = typeChambre;
+    };
 
-public String getTypeChambre(){
-    return typeChambre;
-} // getTypeChambre()
+    public String toString(){
+        return typeChambre + " avec Lit " + typeLit + " - Prix : " + getPrixChambre();
+    }
 
-   public String getTypeLit(){
-    return typeLit;
-   } // getTypeLit()
+    public int getPrixChambre(){
+        return typeChambre.getPrixChambre() + typeLit.getPrixLit();
+    }
     
-} // Chambre
+}
