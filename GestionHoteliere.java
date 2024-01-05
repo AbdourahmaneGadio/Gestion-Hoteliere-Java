@@ -251,7 +251,7 @@ public class GestionHoteliere {
             if (indice != indiceChambre) {
                 listeChambreReservTmp.add(chambre);
             } else {
-chambreChoisie = chambre;
+                chambreChoisie = chambre;
                 // On retire de la facture la chambre annulée
                 facture -= chambre.getPrixChambre();
 
@@ -370,24 +370,38 @@ chambreChoisie = chambre;
 
             // On attribute la valeur de la facture
             try {
-                LinkedList<Chambre> listeChambreTmp = new LinkedList<Chambre>();
+                listeChambrePrises = (LinkedList<Chambre>) in.readObject();
 
-                Chambre chambrePlusDispo = (Chambre) in.readObject();
+                // Si au moins une chambre a été réservée
+                if (listeChambrePrises.size() > 0) {
 
-                for (Chambre chambre : listeChambre) {
+                    LinkedList<Chambre> listeChambreTmp = new LinkedList<Chambre>();
 
-                    // Si la chambre dans la liste n'est pas réservée
-                    if (!chambre.toString().equals(chambrePlusDispo.toString())) {
-                        listeChambreTmp.add(chambre);
+                    int indiceChambre = 0;
+
+                    // Dans la liste des chambres réservées
+                    for (int i = 0; i < listeChambrePrises.size(); i++) {
+
+                        String chambrePriseDetails = listeChambrePrises.get(indiceChambre).toString();
+
+                        for (Chambre chambre : listeChambre) {
+
+                            // Si la chambre dans la liste actuelle n'est pas réservée
+                            if (!chambre.toString().equals(chambrePriseDetails)) {
+                                listeChambreTmp.add(chambre);
+                            }
+
+                            // Sinon, on ne l'ajoute pas dans notre nouvelle liste
+                           
+                        }
+
+                        indiceChambre++;
+
                     }
-                    // Sinon
-                    else {
-                        listeChambrePrises.add(chambrePlusDispo);
-                    }
 
+                    // La liste de chambre disponible devient la liste temporaire 
+                    listeChambre = listeChambreTmp;
                 }
-
-                listeChambre = listeChambreTmp;
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -413,9 +427,11 @@ chambreChoisie = chambre;
 
             // On écrit dans le fichier les chambres qui ne seront plus disponibles à la
             // prochaine exécution
-            for (Chambre chambre : listeChambrePrises) {
-                out.writeObject(chambre);
-            }
+            // for (Chambre chambre : listeChambrePrises) {
+            // out.writeObject(chambre);
+            // }
+
+            out.writeObject(listeChambrePrises);
 
             out.close();
             file.close();
