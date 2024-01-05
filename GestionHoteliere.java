@@ -379,24 +379,27 @@ public class GestionHoteliere {
 
                     int indiceChambre = 0;
 
+                    // Dans la liste des chambres réservées
                     for (int i = 0; i < listeChambrePrises.size(); i++) {
 
                         String chambrePriseDetails = listeChambrePrises.get(indiceChambre).toString();
 
                         for (Chambre chambre : listeChambre) {
-                            // Si la chambre dans la liste n'est pas réservée
+
+                            // Si la chambre dans la liste actuelle n'est pas réservée
                             if (!chambre.toString().equals(chambrePriseDetails)) {
                                 listeChambreTmp.add(chambre);
                             }
+
                             // Sinon, on ne l'ajoute pas dans notre nouvelle liste
-                            else {
-                            }
+                           
                         }
 
                         indiceChambre++;
 
                     }
 
+                    // La liste de chambre disponible devient la liste temporaire 
                     listeChambre = listeChambreTmp;
                 }
 
